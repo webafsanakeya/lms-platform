@@ -17,6 +17,7 @@ model User {
 
   courses      Course[]
   enrollments  Enrollment[]
+  @@rls
 }
 
 model Course {
@@ -31,6 +32,7 @@ model Course {
   instructorId Int
   instructor   User     @relation(fields: [instructorId], references: [id])
   enrollments  Enrollment[]
+  @@rls
 }
 
 model Enrollment {
@@ -43,4 +45,5 @@ model Enrollment {
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@rls
 }
