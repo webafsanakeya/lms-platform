@@ -363,6 +363,23 @@
     "namespaces": {
       "public": {
         "entries": {
+          "rls": {
+            "Course": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Course"
+            },
+            "Enrollment": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Enrollment"
+            },
+            "User": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "User"
+            }
+          },
           "table": {
             "Course": {
               "columns": {
@@ -660,7 +677,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "d30b2a43fe98f479d5c0de30792815d1a96e199bce6a9331514026e0004e3f00"
+    "storageHash": "f02185d0cc55693da4bef5396f6f7379a242c5cf1d1cee9b198b7c8b8ee8d15e"
   },
   "capabilities": {
     "postgres": {
