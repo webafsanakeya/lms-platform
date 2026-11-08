@@ -1,39 +1,11 @@
 import "server-only";
-import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { signToken, verifyToken, SESSION_DAYS } from "./token";
+import type { SessionPayload } from "./token";
 
-const secretKey = process.env.SESSION_SECRET;
-if (!secretKey) throw new Error("SESSION_SECRET is not set in .env");
-const key = new TextEncoder().encode(secretKey);
+export { verifyToken };
+export type { SessionPayload };
 
-const SESSION_DAYS = 7;
-
-export type SessionPayload = {
-  userId: number;
-  role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
-};
-
-// Token toiri koro ar chabi diye sign koro
-export async function signToken(payload: SessionPayload) {
-  return new SignJWT({ ...payload })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_DAYS}d`)
-    .sign(key);
-}
-
-// Token thik ki na dekho. Vul ba expired hole null
-export async function verifyToken(token: string | undefined) {
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, key, { algorithms: ["HS256"] });
-    return payload as unknown as SessionPayload;
-  } catch {
-    return null;
-  }
-}
-
-// Login-er por cookie set koro
 export async function createSession(payload: SessionPayload) {
   const token = await signToken(payload);
   const cookieStore = await cookies();
@@ -46,8 +18,13 @@ export async function createSession(payload: SessionPayload) {
   });
 }
 
-// Logout-er jonno cookie muche dao
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
+}
+
+// Naya: cookie theke current session ber koro. Login na thakle null
+export async function getSession() {
+  const token = (await cookies()).get("session")?.value;
+  return verifyToken(token);
 }
