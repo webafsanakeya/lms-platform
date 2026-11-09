@@ -8,8 +8,12 @@ async function main() {
   await db.orm.public.Course.where({}).deleteAll();
   await db.orm.public.User.where({}).deleteAll();
 
-  // 2. Demo password hash koro (eta shudhu test-er jonno)
-  const passwordHash = await bcrypt.hash("Password123!", 10);
+  
+  const seedPassword = process.env.SEED_PASSWORD;
+  if(!seedPassword || seedPassword.length < 12) {
+    throw new Error ("Set SEED_PASSWORD (12+ characters) in .env");
+  }
+  const passwordHash = await bcrypt.hash(seedPassword, 10);
 
   // 3. Users banao
   const admin = await db.orm.public.User.create({
@@ -45,7 +49,7 @@ async function main() {
 
     const course2 = await db.orm.public.Course.create({
     title: "JavaScript Basics",
-    slug: "javaScript-basics",
+    slug: "javascript-basics",
     description: "Learn JavaScript from scratch",
     priceCents: 0,
     published: true,
