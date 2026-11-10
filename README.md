@@ -117,6 +117,7 @@ migrations/         # Prisma migration history
 - [ ] Payments with Stripe (test mode)
 - [ ] Automated tests and CI with GitHub Actions
 - [ ] Docker setup and cloud deployment
+- [ ] Rate limiting on the login endpoint
 
 ## What I learned
 
