@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function RegisterPage() {
     <main className="mx-auto flex min-h-[80vh] max-w-sm items-center p-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Register</CardTitle>
+          <CardTitle className="text-xl">Create your account</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,6 +69,10 @@ export default function RegisterPage() {
               {loading ? "Creating account..." : "Register"}
             </Button>
           </form>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+  Already have an account? Log in?{" "}
+  <Link href="/login" className="text-primary underline">Register</Link>
+</p>
         </CardContent>
       </Card>
     </main>
