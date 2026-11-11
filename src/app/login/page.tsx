@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function LoginPage() {
     <main className="mx-auto flex min-h-[80vh] max-w-sm items-center p-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Log in</CardTitle>
+          <CardTitle className="text-xl">Welcome back</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,6 +60,10 @@ export default function LoginPage() {
               {loading ? "Logging in..." : "Log in"}
             </Button>
           </form>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+  Dont have an account?{" "}
+  <Link href="/register" className="text-primary underline">Register</Link>
+</p>
         </CardContent>
       </Card>
     </main>
