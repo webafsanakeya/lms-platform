@@ -13,8 +13,10 @@ export async function Navbar() {
           {session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
-              {/* TODO: role-er link. INSTRUCTOR ba ADMIN hole /instructor,
-                  shudhu ADMIN hole /admin. session.role === "ADMIN" diye check koro */}
+              {(session.role === "INSTRUCTOR" || session.role === "ADMIN") && (
+  <Link href="/instructor">Instructor</Link>
+)}
+{session.role === "ADMIN" && <Link href="/admin">Admin</Link>}
               <LogoutButton />
             </>
           ) : (

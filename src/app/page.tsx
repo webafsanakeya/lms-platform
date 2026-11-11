@@ -34,7 +34,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="/login"
-            className={buttonVariants({ size: "lg", variant: "outline" })}
+            className={buttonVariants({ size: "lg", variant: "secondary" })}
           >
             Log in
           </Link>
@@ -53,6 +53,13 @@ export default function HomePage() {
           </Card>
         ))}
       </section>
+      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+  Built by Afsana Noor Keya ·{" "}
+  <a href="https://github.com/webafsanakeya/lms-platform" className="underline">
+    Source on GitHub
+  </a>
+</footer>
     </main>
+    
   );
 }
