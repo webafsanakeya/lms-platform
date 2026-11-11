@@ -41,7 +41,7 @@ async function DashboardContent() {
       <h1 className="text-2xl font-semibold">Welcome, {user.name}</h1>
       <p className="mt-1 text-sm text-muted-foreground">Signed in as {user.role}</p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -50,6 +50,14 @@ async function DashboardContent() {
           </CardHeader>
           <CardContent className="text-3xl font-semibold">{statValue}</CardContent>
         </Card>
+        <Card>
+  <CardHeader>
+    <CardTitle className="text-sm font-medium text-muted-foreground">
+      Account role
+    </CardTitle>
+  </CardHeader>
+  <CardContent className="text-3xl font-semibold">{user.role}</CardContent>
+</Card>
       </div>
 
       <p className="mt-8 text-sm text-muted-foreground">
