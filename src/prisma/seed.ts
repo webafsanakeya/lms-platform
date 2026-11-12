@@ -8,6 +8,13 @@ async function main() {
   await db.orm.public.Course.where({}).deleteAll();
   await db.orm.public.User.where({}).deleteAll();
 
+    const marker = process.env.SEED_DB_MARKER;
+  if (!marker || !process.env.DATABASE_URL?.includes(marker)) {
+    throw new Error(
+      "Refusing to seed: DATABASE_URL does not contain SEED_DB_MARKER. " +
+        "Point DATABASE_URL at the dev database first.",
+    );
+  }
   
   const seedPassword = process.env.SEED_PASSWORD;
   if(!seedPassword || seedPassword.length < 12) {
@@ -16,7 +23,7 @@ async function main() {
   const passwordHash = await bcrypt.hash(seedPassword, 10);
 
   // 3. Users banao
-  const admin = await db.orm.public.User.create({
+  await db.orm.public.User.create({
     name: "Admin User",
     email: "admin@lms.test",
     passwordHash,
@@ -47,7 +54,7 @@ async function main() {
     instructorId: instructor.id,
   });
 
-    const course2 = await db.orm.public.Course.create({
+    await db.orm.public.Course.create({
     title: "JavaScript Basics",
     slug: "javascript-basics",
     description: "Learn JavaScript from scratch",
