@@ -63,6 +63,26 @@ async function main() {
     instructorId: instructor.id,
   });
 
+    await db.orm.public.Course.create({
+    title: "TypeScript Essentials",
+    slug: "typescript-essentials",
+    description:
+      "Types, interfaces and generics for everyday JavaScript projects.",
+    priceCents: 1999,
+    published: true,
+    instructorId: instructor.id,
+  });
+
+  // A draft: must NOT show up in the public catalog
+  await db.orm.public.Course.create({
+    title: "Docker for Beginners (draft)",
+    slug: "docker-for-beginners",
+    description: "Still being written.",
+    priceCents: 0,
+    published: false,
+    instructorId: instructor.id,
+  });
+
   // 5. Enrollment banao
   await db.orm.public.Enrollment.create({
     userId: student.id,
