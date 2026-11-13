@@ -24,6 +24,9 @@ export async function Navbar() {
         </Link>
 
         <div className="flex items-center gap-5 text-sm font-medium">
+          <Link href="/courses" className="hover:underline">
+            Courses
+          </Link>
           {session ? (
             <>
               <Link href="/dashboard" className="hover:underline">
