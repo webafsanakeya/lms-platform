@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { db } from "@/prisma/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { NeoCard } from "@/components/neo";
 
 async function DashboardContent() {
   const session = await getSession();
@@ -38,29 +38,25 @@ async function DashboardContent() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">Welcome, {user.name}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Signed in as {user.role}</p>
+      <h1 className="font-display text-4xl font-extrabold tracking-tight">
+        Welcome, {user.name}
+      </h1>
+      <span className="mt-3 inline-block border-2 border-ink bg-brand-yellow px-2 py-0.5 text-sm font-semibold">
+        {user.role}
+      </span>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {statLabel}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-3xl font-semibold">{statValue}</CardContent>
-        </Card>
-        <Card>
-  <CardHeader>
-    <CardTitle className="text-sm font-medium text-muted-foreground">
-      Account role
-    </CardTitle>
-  </CardHeader>
-  <CardContent className="text-3xl font-semibold">{user.role}</CardContent>
-</Card>
+      <div className="mt-8 grid gap-6 sm:grid-cols-2">
+        <NeoCard className="bg-brand-blue p-6 text-white">
+          <p className="text-sm font-medium">{statLabel}</p>
+          <p className="mt-2 font-display text-5xl font-extrabold">{statValue}</p>
+        </NeoCard>
+        <NeoCard className="bg-brand-green p-6">
+          <p className="text-sm font-medium">Account role</p>
+          <p className="mt-2 font-display text-3xl font-extrabold">{user.role}</p>
+        </NeoCard>
       </div>
 
-      <p className="mt-8 text-sm text-muted-foreground">
+      <p className="mt-8 inline-block border-2 border-dashed border-ink px-3 py-2 text-sm">
         Course management and enrollment are coming soon.
       </p>
     </>
@@ -69,8 +65,10 @@ async function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <main className="mx-auto max-w-5xl p-4">
-      <Suspense fallback={<p className="text-sm text-muted-foreground">Loading...</p>}>
+    <main className="mx-auto max-w-6xl px-4 py-12">
+      <Suspense
+        fallback={<p className="text-sm font-medium">Loading your dashboard...</p>}
+      >
         <DashboardContent />
       </Suspense>
     </main>
