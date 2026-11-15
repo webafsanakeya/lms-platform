@@ -50,7 +50,7 @@ export function Footer() {
               {col.links.map((l) => (
                 <li key={l.label}>
                   {l.href.startsWith("/") ? (
-                    <Link href={l.href} className="hover:underline">
+                    <Link href={l.href} className="inline-block py-1 hover:underline">
                       {l.label}
                     </Link>
                   ) : (
@@ -58,7 +58,7 @@ export function Footer() {
                       href={l.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:underline"
+                      className="inline-block py-1 hover:underline"
                     >
                       {l.label}
                     </a>

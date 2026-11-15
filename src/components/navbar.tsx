@@ -11,10 +11,10 @@ export async function Navbar() {
 
   return (
     <nav className="border-b-2 border-ink bg-white">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+      <div className="mx-auto flex min-h-16 max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-center gap-2 font-display text-xl font-extrabold"
+          className="flex shrink-0 items-center gap-2 font-display text-xl font-extrabold"
         >
           <span
             aria-hidden
@@ -23,22 +23,22 @@ export async function Navbar() {
           LMS
         </Link>
 
-        <div className="flex items-center gap-5 text-sm font-medium">
-          <Link href="/courses" className="hover:underline">
+        <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-sm font-medium sm:gap-x-5">
+          <Link href="/courses" className="inline-block py-2 hover:underline">
             Courses
           </Link>
           {session ? (
             <>
-              <Link href="/dashboard" className="hover:underline">
+              <Link href="/dashboard" className="inline-block py-2 hover:underline">
                 Dashboard
               </Link>
               {canSeeInstructor && (
-                <Link href="/instructor" className="hover:underline">
+                <Link href="/instructor" className="inline-block py-2 hover:underline">
                   Instructor
                 </Link>
               )}
               {session.role === "ADMIN" && (
-                <Link href="/admin" className="hover:underline">
+                <Link href="/admin" className="inline-block py-2 hover:underline">
                   Admin
                 </Link>
               )}
@@ -46,7 +46,7 @@ export async function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="hover:underline">
+              <Link href="/login" className="inline-block py-2 hover:underline">
                 Log in
               </Link>
               <Link
