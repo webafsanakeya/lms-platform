@@ -4,6 +4,7 @@ import { Sticker, NeoCard } from "@/components/neo";
 import { cn } from "@/lib/utils";
 import { HeroCards } from "@/components/hero-cards";
 import { Reveal } from "@/components/reveal";
+import { LazyBlocks } from "@/components/lazy-blocks";
 
 const perks = ["Secure sign-in", "Role-based dashboards", "Open source"];
 
@@ -170,25 +171,29 @@ export default function HomePage() {
       </section>
 
       {/* Call to action */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <div className="rounded-2xl border-2 border-ink bg-brand-purple p-10 text-center text-white shadow-hard-lg">
-          <h2 className="font-display text-3xl font-extrabold sm:text-5xl">
-            Ready to try it?
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm">
-            Create an account in a few seconds and look around.
-          </p>
-          <Link
-            href="/register"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "mt-6 rounded-lg border-2 border-ink bg-brand-yellow font-semibold text-ink shadow-hard transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none",
-            )}
-          >
-            Get started free
-          </Link>
-        </div>
-      </section>
+{/* Call to action */}
+<section className="mx-auto max-w-6xl px-4 py-20">
+  <div className="grid items-center gap-6 overflow-hidden rounded-2xl border-2 border-ink bg-brand-purple p-10 text-white shadow-hard-lg md:grid-cols-2">
+    <div className="text-center md:text-left">
+      <h2 className="font-display text-3xl font-extrabold sm:text-5xl">
+        Ready to try it?
+      </h2>
+      <p className="mt-3 max-w-md text-sm">
+        Create an account in a few seconds and look around.
+      </p>
+      <Link
+        href="/register"
+        className={cn(
+          buttonVariants({ size: "lg" }),
+          "mt-6 rounded-lg border-2 border-ink bg-brand-yellow font-semibold text-ink shadow-hard transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none",
+        )}
+      >
+        Get started free
+      </Link>
+    </div>
+    <LazyBlocks />
+  </div>
+</section>
     </main>
   );
 }
