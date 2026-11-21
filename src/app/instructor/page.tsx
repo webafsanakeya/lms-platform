@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { db } from "@/prisma/db";
 import { NeoCard, Sticker } from "@/components/neo";
+import { PublishToggle } from "@/components/publish-toggle";
+import { buttonVariants } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -37,13 +39,17 @@ async function InstructorContent() {
       </h1>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
-        <button
-          type="button"
-          disabled
-          className="cursor-not-allowed rounded-lg border-2 border-ink bg-white px-4 py-2 text-sm font-semibold opacity-70"
-        >
-          + New course (coming soon)
-        </button>
+        {!isAdmin && (
+          <Link
+            href="/instructor/courses/new"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "rounded-lg border-2 border-ink bg-brand-blue font-semibold text-white shadow-hard transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none",
+            )}
+          >
+            + New course
+          </Link>
+        )}
         <p className="text-sm">
           {courses.length} {courses.length === 1 ? "course" : "courses"}
         </p>
@@ -51,7 +57,7 @@ async function InstructorContent() {
 
       {courses.length === 0 ? (
         <p className="mt-8 inline-block border-2 border-dashed border-ink px-3 py-2 text-sm">
-          You do not have any courses yet.
+          You do not have any courses yet. Create your first one.
         </p>
       ) : (
         <ul className="mt-8 grid gap-6 sm:grid-cols-2">
@@ -70,16 +76,22 @@ async function InstructorContent() {
                   </span>
                 </div>
                 <p className="mt-2 text-sm">{formatPrice(c.priceCents)}</p>
-                {c.published ? (
-                  <Link
-                    href={`/courses/${c.slug}`}
-                    className="mt-4 inline-block py-1 text-sm font-semibold underline"
-                  >
-                    View public page
-                  </Link>
-                ) : (
-                  <p className="mt-4 text-xs">Not visible to students yet.</p>
-                )}
+
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  {c.published ? (
+                    <Link
+                      href={`/courses/${c.slug}`}
+                      className="inline-block py-1 text-sm font-semibold underline"
+                    >
+                      View public page
+                    </Link>
+                  ) : (
+                    <p className="text-xs">Not visible to students yet.</p>
+                  )}
+                  {!isAdmin && (
+                    <PublishToggle slug={c.slug} published={c.published} />
+                  )}
+                </div>
               </NeoCard>
             </li>
           ))}
