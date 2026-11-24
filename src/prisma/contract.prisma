@@ -17,6 +17,7 @@ model User {
 
   courses      Course[]
   enrollments  Enrollment[]
+  lessonProgress LessonProgress[]
   @@rls
 }
 
@@ -32,6 +33,7 @@ model Course {
   instructorId Int
   instructor   User     @relation(fields: [instructorId], references: [id])
   enrollments  Enrollment[]
+  lessons      Lesson[]
   @@rls
 }
 
@@ -45,5 +47,33 @@ model Enrollment {
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@rls
+}
+
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  position  Int
+  createdAt DateTime @default(now())
+
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress  LessonProgress[]
+
+  @@unique([courseId, position])
+  @@rls
+}
+
+model LessonProgress {
+  id          Int      @id @default(autoincrement())
+  completedAt DateTime @default(now())
+
+  userId      Int
+  lessonId    Int
+  user        User     @relation(fields: [userId], references: [id])
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
   @@rls
 }
