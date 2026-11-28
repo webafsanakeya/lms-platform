@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/prisma/db";
 import { registerSchema } from "@/lib/validations";
+import { createSession } from "@/lib/session";
 
 export async function POST(request: Request) {
   // 1. Body pora. Vul JSON hole 400
@@ -29,19 +30,19 @@ export async function POST(request: Request) {
   const { name, password } = parsed.data;
   const email = parsed.data.email.toLowerCase();
 
-// Step A: ei email diye age-i user ache kina dekho
+  // Step A: ei email diye age-i user ache kina dekho
 
-const existingUser = await db.orm.public.User.where({email}).first();
-if (existingUser) {
+  const existingUser = await db.orm.public.User.where({ email }).first();
+  if (existingUser) {
     return NextResponse.json(
-        {error: "Email already registered"},
-        {status: 409},
+      { error: "Email already registered" },
+      { status: 409 },
     );
-}
+  }
 
- // Step B: password hash koro
+  // Step B: password hash koro
 
- const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 10);
 
   // Step C: notun user toiri koro
 
@@ -51,7 +52,7 @@ if (existingUser) {
     passwordHash,
     role: "STUDENT",
   });
-
+  await createSession({ userId: user.id, role: user.role });
   // 4. passwordHash bad diye ferot dao
   return NextResponse.json(
     { id: user.id, name: user.name, email: user.email, role: user.role },

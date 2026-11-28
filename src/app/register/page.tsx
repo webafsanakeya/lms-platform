@@ -30,16 +30,15 @@ export default function RegisterPage() {
       if (!res.ok) {
         if (Array.isArray(data.issues)) {
           setError(
-            data.issues
-              .map((i: { message: string }) => i.message)
-              .join(". "),
+            data.issues.map((i: { message: string }) => i.message).join(". "),
           );
         } else {
           setError(data.error ?? "Something went wrong");
         }
         return;
       }
-      router.push("/login");
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setError("Network error. Please try again.");
     } finally {
