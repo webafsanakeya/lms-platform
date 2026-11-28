@@ -5,13 +5,16 @@ import { db } from "@/prisma/db";
 import { getSession } from "@/lib/session";
 import { NeoCard, Sticker } from "@/components/neo";
 import { EnrollButton } from "@/components/enroll-button";
+import { ProgressBar } from "@/components/progress-bar";
 import { buttonVariants } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { connection } from "next/server";
 
 type Props = { params: Promise<{ slug: string }> };
 
 async function CourseDetail({ params }: Props) {
+  await connection();
   const { slug } = await params;
 
   const course = await db.orm.public.Course
@@ -31,6 +34,27 @@ async function CourseDetail({ params }: Props) {
     enrolled = existing !== null;
   }
 
+  // Everyone can see the list of lessons; only these people can open them
+  const isOwner = session?.userId === course.instructorId;
+  const isAdmin = session?.role === "ADMIN";
+  const canOpenLessons = enrolled || isOwner || isAdmin;
+
+  const lessons = await db.orm.public.Lesson
+    .where({ courseId: course.id })
+    .select("id", "title", "position")
+    .orderBy((l) => l.position.asc())
+    .all();
+
+  let doneIds = new Set<number>();
+  if (enrolled && session && lessons.length > 0) {
+    const rows = await db.orm.public.LessonProgress
+      .where({ userId: session.userId })
+      .where((p) => p.lessonId.in(lessons.map((l) => l.id)))
+      .select("lessonId")
+      .all();
+    doneIds = new Set(rows.map((r) => r.lessonId));
+  }
+
   return (
     <div className="mt-6 grid gap-10 lg:grid-cols-3">
       <div className="lg:col-span-2">
@@ -44,6 +68,55 @@ async function CourseDetail({ params }: Props) {
         <p className="mt-6 whitespace-pre-line text-base leading-relaxed">
           {course.description}
         </p>
+
+        <section className="mt-10">
+          <h2 className="font-display text-2xl font-extrabold">Lessons</h2>
+
+          {enrolled && lessons.length > 0 && (
+            <div className="mt-3 max-w-md">
+              <ProgressBar done={doneIds.size} total={lessons.length} />
+            </div>
+          )}
+
+          {lessons.length === 0 ? (
+            <p className="mt-4 inline-block border-2 border-dashed border-ink px-3 py-2 text-sm">
+              Lessons are coming soon.
+            </p>
+          ) : (
+            <ol className="mt-4 space-y-3">
+              {lessons.map((l) => {
+                const row = (
+                  <NeoCard className="flex items-center gap-4 p-4">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-ink bg-brand-yellow font-display font-extrabold">
+                      {doneIds.has(l.id) ? "✓" : l.position}
+                    </span>
+                    <span className="font-medium">{l.title}</span>
+                    {!canOpenLessons && (
+                      <span className="ml-auto shrink-0 border-2 border-ink bg-white px-2 py-0.5 text-xs font-semibold">
+                        Enroll to unlock
+                      </span>
+                    )}
+                  </NeoCard>
+                );
+
+                return (
+                  <li key={l.id}>
+                    {canOpenLessons ? (
+                      <Link
+                        href={`/courses/${course.slug}/lessons/${l.position}`}
+                        className="block transition hover:-translate-y-0.5"
+                      >
+                        {row}
+                      </Link>
+                    ) : (
+                      row
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+        </section>
       </div>
 
       <div>
