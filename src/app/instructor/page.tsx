@@ -89,7 +89,15 @@ async function InstructorContent() {
                     <p className="text-xs">Not visible to students yet.</p>
                   )}
                   {!isAdmin && (
-                    <PublishToggle slug={c.slug} published={c.published} />
+                    <>
+                      <Link
+                        href={`/instructor/courses/${c.slug}/lessons`}
+                        className="inline-block py-1 text-sm font-semibold underline"
+                      >
+                        Manage lessons
+                      </Link>
+                      <PublishToggle slug={c.slug} published={c.published} />
+                    </>
                   )}
                 </div>
               </NeoCard>
